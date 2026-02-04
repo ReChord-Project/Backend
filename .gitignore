@@ -38,3 +38,6 @@ out/
 
 ### private ###
 application-private.properties
+
+### macOS ###
+.DS_Store
