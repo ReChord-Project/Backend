@@ -1,5 +1,6 @@
-package ReChord.backend.repository.entity;
+package ReChord.backend.domain.team.repository.entity;
 
+import ReChord.backend.domain.user.repository.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,17 +9,17 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Friend {
+public class TeamMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requester_id", nullable = false)
-    private User requester;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private User receiver;
+    @JoinColumn(name = "team_id", nullable = false)
+    private Team teamId;
 }

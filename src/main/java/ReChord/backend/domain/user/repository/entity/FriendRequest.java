@@ -1,4 +1,4 @@
-package ReChord.backend.repository.entity;
+package ReChord.backend.domain.user.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
