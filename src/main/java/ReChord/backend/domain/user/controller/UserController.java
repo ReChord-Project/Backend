@@ -31,4 +31,11 @@ public class UserController {
         userService.patchMyProfile(loginId, request);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
     }
+
+    @DeleteMapping()
+    public ResponseEntity<ResponseDto> deleteUser() {
+        String loginId = "로그인 구현 후 수정";
+        userService.deleteUser(loginId);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
+    }
 }

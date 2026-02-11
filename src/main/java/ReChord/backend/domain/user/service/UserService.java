@@ -43,4 +43,10 @@ public class UserService {
             user.changeProfileImage(request.getProfileImage());
         }
     }
+
+    @Transactional
+    public void deleteUser(String loginId) {
+        User user = findByLoginIdOrThrow(loginId);
+        userRepository.delete(user);
+    }
 }
