@@ -20,17 +20,20 @@ public class UserService {
     private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
 
-    public GetMyProfileResponse getMyProfile(String loginId) {
-        User user = userRepository.findByLoginId(loginId)
+    public User findByLoginIdOrThrow(String loginId) {
+        return userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new BusinessException(ResponseCode.NOT_EXISTED_USER));
+    }
 
+
+    public GetMyProfileResponse getMyProfile(String loginId) {
+        User user = findByLoginIdOrThrow(loginId);
         return GetMyProfileResponse.of(user);
     }
 
     @Transactional
     public void patchMyProfile(String loginId, PatchMyProfileRequest request) {
-        User user = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new BusinessException(ResponseCode.NOT_EXISTED_USER));
+        User user = findByLoginIdOrThrow(loginId);
 
         if(request.getName() != null) {
             user.changeName(request.getName());
