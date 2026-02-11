@@ -2,6 +2,7 @@ package ReChord.backend.domain.user.controller;
 
 import ReChord.backend.domain.user.service.UserService;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
+import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.common.ResponseDto;
@@ -37,5 +38,12 @@ public class UserController {
         String loginId = "로그인 구현 후 수정";
         userService.deleteUser(loginId);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/friend-list")
+    public ResponseEntity<ResponseDto> getFriendList() {
+        String loginId = "로그인 구현 후 수정";
+        GetFriendListResponse response = userService.getFriendList(loginId);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
     }
 }
