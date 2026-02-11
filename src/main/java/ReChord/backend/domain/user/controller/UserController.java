@@ -1,14 +1,13 @@
 package ReChord.backend.domain.user.controller;
 
 import ReChord.backend.domain.user.service.UserService;
+import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.common.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,5 +21,14 @@ public class UserController {
         String loginId = "로그인 구현 후 수정";
         GetMyProfileResponse response = userService.getMyProfile(loginId);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
+    }
+
+    @PatchMapping("/my-profile")
+    public ResponseEntity<ResponseDto> patchMyProfile(
+            @RequestBody PatchMyProfileRequest request
+            ) {
+        String loginId = "로그인 구현 후 수정";
+        userService.patchMyProfile(loginId, request);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
     }
 }

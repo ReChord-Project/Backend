@@ -37,4 +37,12 @@ public class User {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }
