@@ -7,6 +7,8 @@ import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.common.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +43,11 @@ public class UserController {
     }
 
     @GetMapping("/friend-list")
-    public ResponseEntity<ResponseDto> getFriendList() {
+    public ResponseEntity<ResponseDto> getFriendList(
+            @PageableDefault(page = 0, size = 20) Pageable pageable
+            ) {
         String loginId = "로그인 구현 후 수정";
-        GetFriendListResponse response = userService.getFriendList(loginId);
+        GetFriendListResponse response = userService.getFriendList(loginId, pageable);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
     }
 }

@@ -12,9 +12,10 @@ import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.exception.BusinessException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,9 +55,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public GetFriendListResponse getFriendList(String loginId) {
+    public GetFriendListResponse getFriendList(String loginId, Pageable pageable) {
         User user = findByLoginIdOrThrow(loginId);
-        List<Friend> friendList = friendRepository.findAllFriendsProfile(user);
+        Page<Friend> friendList = friendRepository.findAllFriendsProfile(user, pageable);
         return GetFriendListResponse.of(friendList);
     }
 }
