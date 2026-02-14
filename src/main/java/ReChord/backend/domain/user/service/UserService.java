@@ -104,7 +104,7 @@ public class UserService {
         }
 
         List<FriendRequest> relatedRequests = friendRequestRepository
-                .findByRequesterAndReceiverOrReverse(requester, receiver);
+                .findRequests(requester, receiver);
         friendRequestRepository.deleteAll(relatedRequests);
 
         if (friendRepository.existsByUserAndFriend(requester, receiver) ||
