@@ -18,6 +18,8 @@ public enum ResponseCode {
     CANNOT_ADD_SELF(HttpStatus.BAD_REQUEST,"You cannot send a friend request to yourself."),
     ALREADY_FRIEND(HttpStatus.BAD_REQUEST,"You are already friends with this user."),
     ALREADY_REQUESTED(HttpStatus.BAD_REQUEST,"You have already sent a friend request to this user."),
+    NOT_EXISTED_REQUEST(HttpStatus.NOT_FOUND,"This request does not exist."),
+    NO_PERMISSION(HttpStatus.UNAUTHORIZED,"You do not have permission.");
 
     ;
     private final HttpStatus status;

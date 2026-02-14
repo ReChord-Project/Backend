@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -44,11 +46,11 @@ public class UserService {
     public void patchMyProfile(String loginId, PatchMyProfileRequest request) {
         User user = findByLoginIdOrThrow(loginId);
 
-        if(request.getName() != null) {
+        if (request.getName() != null) {
             user.changeName(request.getName());
         }
 
-        if(request.getProfileImage() != null) {
+        if (request.getProfileImage() != null) {
             user.changeProfileImage(request.getProfileImage());
         }
     }
@@ -74,16 +76,42 @@ public class UserService {
     public void postFriendRequest(String loginId, PostFriendRequest request) {
         User requester = findByLoginIdOrThrow(loginId);
         User receiver = findByLoginIdOrThrow(request.getReceiverLoginId());
-        if(requester.getLoginId().equals(receiver.getLoginId())) {
+        if (requester.getLoginId().equals(receiver.getLoginId())) {
             throw new BusinessException(ResponseCode.CANNOT_ADD_SELF);
         }
-        if(friendRepository.existsByUserAndFriend(requester, receiver)) {
+        if (friendRepository.existsByUserAndFriend(requester, receiver) ||
+                friendRepository.existsByUserAndFriend(receiver, requester)) {
             throw new BusinessException(ResponseCode.ALREADY_FRIEND);
         }
-        if(friendRequestRepository.existsByRequesterAndReceiver(requester, receiver)) {
+        if (friendRequestRepository.existsByRequesterAndReceiver(requester, receiver)) {
             throw new BusinessException(ResponseCode.ALREADY_REQUESTED);
         }
-
         friendRequestRepository.save(FriendRequest.of(requester, receiver));
+    }
+
+    @Transactional
+    public void acceptFriendRequest(String loginId, Long requestId) {
+        User user = findByLoginIdOrThrow(loginId);
+
+        FriendRequest request = friendRequestRepository.findById(requestId)
+                .orElseThrow(() -> new BusinessException(ResponseCode.NOT_EXISTED_REQUEST));
+
+        User requester = request.getRequester();
+        User receiver = request.getReceiver();
+
+        if (!user.equals(receiver)) {
+            throw new BusinessException(ResponseCode.NO_PERMISSION);
+        }
+
+        List<FriendRequest> relatedRequests = friendRequestRepository
+                .findByRequesterAndReceiverOrReverse(requester, receiver);
+        friendRequestRepository.deleteAll(relatedRequests);
+
+        if (friendRepository.existsByUserAndFriend(requester, receiver) ||
+                friendRepository.existsByUserAndFriend(receiver, requester)) {
+            throw new BusinessException(ResponseCode.ALREADY_FRIEND);
+        }
+
+        friendRepository.saveAll(List.of(Friend.of(requester, receiver), Friend.of(receiver, requester)));
     }
 }

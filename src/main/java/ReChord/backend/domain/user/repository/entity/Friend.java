@@ -21,4 +21,13 @@ public class Friend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id", nullable = false)
     private User friend;
+
+    private Friend(User user, User friend) {
+        this.user = user;
+        this.friend = friend;
+    }
+
+    public static Friend of(User user, User friend){
+        return new Friend(user, friend);
+    }
 }

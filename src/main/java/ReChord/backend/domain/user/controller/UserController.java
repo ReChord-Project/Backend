@@ -71,4 +71,13 @@ public class UserController {
         userService.postFriendRequest(loginId, request);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
     }
+
+    @PostMapping("/friend-request/{requestId}")
+    public ResponseEntity<ResponseDto> acceptFriendRequest(
+            @PathVariable("requestId") Long requestId
+    ) {
+        String loginId = "로그인 구현 후 수정";
+        userService.acceptFriendRequest(loginId, requestId);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
+    }
 }
