@@ -80,4 +80,13 @@ public class UserController {
         userService.acceptFriendRequest(loginId, requestId);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
     }
+
+    @DeleteMapping("/friend-request/{requestId}")
+    public ResponseEntity<ResponseDto> rejectFriendRequest(
+            @PathVariable Long requestId
+    ) {
+        String loginId = "로그인 구현 후 수정";
+        userService.rejectFriendRequest(loginId, requestId);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
+    }
 }

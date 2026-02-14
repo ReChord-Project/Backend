@@ -114,4 +114,18 @@ public class UserService {
 
         friendRepository.saveAll(List.of(Friend.of(requester, receiver), Friend.of(receiver, requester)));
     }
+
+    @Transactional
+    public void rejectFriendRequest(String loginId, Long requestId) {
+        User receiver = findByLoginIdOrThrow(loginId);
+
+        FriendRequest request = friendRequestRepository.findById(requestId)
+                .orElseThrow(() -> new BusinessException(ResponseCode.NOT_EXISTED_REQUEST));
+
+        if (!request.getReceiver().equals(receiver)) {
+            throw new BusinessException(ResponseCode.NO_PERMISSION);
+        }
+
+        friendRequestRepository.delete(request);
+    }
 }
