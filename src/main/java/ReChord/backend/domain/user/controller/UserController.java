@@ -1,9 +1,11 @@
 package ReChord.backend.domain.user.controller;
 
 import ReChord.backend.domain.user.service.UserService;
+import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
+import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.common.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,15 @@ public class UserController {
             ) {
         String loginId = "로그인 구현 후 수정";
         GetFriendListResponse response = userService.getFriendList(loginId, pageable);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDto> getSearch(
+            @RequestBody GetSearchUserListRequest request,
+            @PageableDefault(page = 0, size = 20) Pageable pageable
+    ) {
+        GetSearchUserListResponse response = userService.getSearchUser(request, pageable);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
     }
 }

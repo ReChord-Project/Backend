@@ -5,9 +5,11 @@ import ReChord.backend.domain.user.repository.FriendRequestRepository;
 import ReChord.backend.domain.user.repository.UserRepository;
 import ReChord.backend.domain.user.repository.entity.Friend;
 import ReChord.backend.domain.user.repository.entity.User;
+import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
+import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.exception.BusinessException;
 import jakarta.transaction.Transactional;
@@ -59,5 +61,10 @@ public class UserService {
         User user = findByLoginIdOrThrow(loginId);
         Page<Friend> friendList = friendRepository.findAllFriendsProfile(user, pageable);
         return GetFriendListResponse.of(friendList);
+    }
+
+    public GetSearchUserListResponse getSearchUser(GetSearchUserListRequest request, Pageable pageable) {
+        Page<User> userList = userRepository.searchUsers(request.getSearchWord(), pageable);
+        return GetSearchUserListResponse.of(userList);
     }
 }
