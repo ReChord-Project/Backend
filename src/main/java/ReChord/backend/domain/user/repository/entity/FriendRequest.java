@@ -21,4 +21,13 @@ public class FriendRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
+
+    private FriendRequest(User requester, User receiver) {
+        this.requester = requester;
+        this.receiver = receiver;
+    }
+
+    public static FriendRequest of(User requester, User receiver) {
+        return new FriendRequest(requester, receiver);
+    }
 }

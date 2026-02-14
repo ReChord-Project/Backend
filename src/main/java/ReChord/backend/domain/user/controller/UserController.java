@@ -3,6 +3,7 @@ package ReChord.backend.domain.user.controller;
 import ReChord.backend.domain.user.service.UserService;
 import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
+import ReChord.backend.domain.user.service.dto.request.PostFriendRequest;
 import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
@@ -60,5 +61,14 @@ public class UserController {
     ) {
         GetSearchUserListResponse response = userService.getSearchUser(request, pageable);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
+    }
+
+    @PostMapping("/friend-request")
+    public ResponseEntity<ResponseDto> postFriendRequest(
+            @RequestBody PostFriendRequest request
+    ) {
+        String loginId = "로그인 구현 후 수정";
+        userService.postFriendRequest(loginId, request);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
     }
 }

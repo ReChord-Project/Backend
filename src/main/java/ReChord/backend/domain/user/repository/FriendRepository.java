@@ -16,4 +16,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             FROM Friend f JOIN FETCH f.friend
             WHERE f.user = :user""")
     Page<Friend> findAllFriendsProfile(@Param("user") User user, Pageable pageable);
+
+    Boolean existsByUserAndFriend(User user, User friend);
 }

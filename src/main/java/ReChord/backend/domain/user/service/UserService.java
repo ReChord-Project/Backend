@@ -4,9 +4,11 @@ import ReChord.backend.domain.user.repository.FriendRepository;
 import ReChord.backend.domain.user.repository.FriendRequestRepository;
 import ReChord.backend.domain.user.repository.UserRepository;
 import ReChord.backend.domain.user.repository.entity.Friend;
+import ReChord.backend.domain.user.repository.entity.FriendRequest;
 import ReChord.backend.domain.user.repository.entity.User;
 import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
+import ReChord.backend.domain.user.service.dto.request.PostFriendRequest;
 import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
@@ -66,5 +68,22 @@ public class UserService {
     public GetSearchUserListResponse getSearchUser(GetSearchUserListRequest request, Pageable pageable) {
         Page<User> userList = userRepository.searchUsers(request.getSearchWord(), pageable);
         return GetSearchUserListResponse.of(userList);
+    }
+
+    @Transactional
+    public void postFriendRequest(String loginId, PostFriendRequest request) {
+        User requester = findByLoginIdOrThrow(loginId);
+        User receiver = findByLoginIdOrThrow(request.getReceiverLoginId());
+        if(requester.getLoginId().equals(receiver.getLoginId())) {
+            throw new BusinessException(ResponseCode.CANNOT_ADD_SELF);
+        }
+        if(friendRepository.existsByUserAndFriend(requester, receiver)) {
+            throw new BusinessException(ResponseCode.ALREADY_FRIEND);
+        }
+        if(friendRequestRepository.existsByRequesterAndReceiver(requester, receiver)) {
+            throw new BusinessException(ResponseCode.ALREADY_REQUESTED);
+        }
+
+        friendRequestRepository.save(FriendRequest.of(requester, receiver));
     }
 }
