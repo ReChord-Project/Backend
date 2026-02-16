@@ -1,5 +1,7 @@
 package ReChord.backend.domain.user.service;
 
+import ReChord.backend.domain.team.repository.TeamMemberRepository;
+import ReChord.backend.domain.team.repository.TeamRepository;
 import ReChord.backend.domain.user.repository.FriendRepository;
 import ReChord.backend.domain.user.repository.FriendRequestRepository;
 import ReChord.backend.domain.user.repository.UserRepository;
@@ -9,10 +11,7 @@ import ReChord.backend.domain.user.repository.entity.User;
 import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.request.PostFriendRequest;
-import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
-import ReChord.backend.domain.user.service.dto.response.GetFriendRequestListResponse;
-import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
-import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
+import ReChord.backend.domain.user.service.dto.response.*;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.exception.BusinessException;
 import jakarta.transaction.Transactional;
@@ -31,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final FriendRepository friendRepository;
     private final FriendRequestRepository friendRequestRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     public User findByLoginIdOrThrow(String loginId) {
         return userRepository.findByLoginId(loginId)
@@ -133,5 +133,10 @@ public class UserService {
     public GetFriendRequestListResponse getFriendRequestListResponse(String loginId) {
         User user = findByLoginIdOrThrow(loginId);
         return GetFriendRequestListResponse.of(friendRequestRepository.findByReceiver(user));
+    }
+
+    public GetMyTeamListResponse getMyTeamList(String loginId) {
+        User user = findByLoginIdOrThrow(loginId);
+        return GetMyTeamListResponse.of(teamMemberRepository.findByUser(user));
     }
 }

@@ -4,10 +4,7 @@ import ReChord.backend.domain.user.service.UserService;
 import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.request.PostFriendRequest;
-import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
-import ReChord.backend.domain.user.service.dto.response.GetFriendRequestListResponse;
-import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
-import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
+import ReChord.backend.domain.user.service.dto.response.*;
 import ReChord.backend.global.common.ResponseCode;
 import ReChord.backend.global.common.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -95,6 +92,13 @@ public class UserController {
     public ResponseEntity<ResponseDto> getFriendRequestList() {
         String loginId = "로그인 구현 후 수정";
         GetFriendRequestListResponse response = userService.getFriendRequestListResponse(loginId);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
+    }
+
+    @GetMapping("/team-list")
+    public ResponseEntity<ResponseDto> getMyTeamList() {
+        String loginId = "로그인 구현 후 수정";
+        GetMyTeamListResponse response = userService.getMyTeamList(loginId);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
     }
 }
