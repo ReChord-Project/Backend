@@ -5,6 +5,7 @@ import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.request.PostFriendRequest;
 import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
+import ReChord.backend.domain.user.service.dto.response.GetFriendRequestListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
 import ReChord.backend.global.common.ResponseCode;
@@ -88,5 +89,12 @@ public class UserController {
         String loginId = "로그인 구현 후 수정";
         userService.rejectFriendRequest(loginId, requestId);
         return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS));
+    }
+
+    @GetMapping("/friend-request/list")
+    public ResponseEntity<ResponseDto> getFriendRequestList() {
+        String loginId = "로그인 구현 후 수정";
+        GetFriendRequestListResponse response = userService.getFriendRequestListResponse(loginId);
+        return ResponseEntity.ok(ResponseDto.of(ResponseCode.SUCCESS, response));
     }
 }

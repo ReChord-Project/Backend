@@ -18,4 +18,10 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
             WHERE (fr.requester = :user1 AND fr.receiver = :user2) OR
                   (fr.requester = :user2 AND fr.receiver = :user1)""")
     List<FriendRequest> findRequests(@Param("user1") User user1, @Param("user2") User user2);
+
+    @Query("""
+            SELECT fr
+            FROM FriendRequest fr JOIN FETCH fr.requester
+            WHERE fr.receiver = :user""")
+    List<FriendRequest> findByReceiver(User user);
 }

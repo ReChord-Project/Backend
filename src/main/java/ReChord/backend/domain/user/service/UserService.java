@@ -10,6 +10,7 @@ import ReChord.backend.domain.user.service.dto.request.GetSearchUserListRequest;
 import ReChord.backend.domain.user.service.dto.request.PatchMyProfileRequest;
 import ReChord.backend.domain.user.service.dto.request.PostFriendRequest;
 import ReChord.backend.domain.user.service.dto.response.GetFriendListResponse;
+import ReChord.backend.domain.user.service.dto.response.GetFriendRequestListResponse;
 import ReChord.backend.domain.user.service.dto.response.GetMyProfileResponse;
 import ReChord.backend.domain.user.service.dto.response.GetSearchUserListResponse;
 import ReChord.backend.global.common.ResponseCode;
@@ -127,5 +128,10 @@ public class UserService {
         }
 
         friendRequestRepository.delete(request);
+    }
+
+    public GetFriendRequestListResponse getFriendRequestListResponse(String loginId) {
+        User user = findByLoginIdOrThrow(loginId);
+        return GetFriendRequestListResponse.of(friendRequestRepository.findByReceiver(user));
     }
 }
